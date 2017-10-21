@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CRMModel2.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Clientes">
+    <Key>
+      <PropertyRef Name="cliente_id" />
+    </Key>
+    <Property Name="cliente_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="100" />
+    <Property Name="pais" Type="varchar" MaxLength="100" />
+    <Property Name="correo" Type="varchar" MaxLength="100" />
+    <Property Name="telefono" Type="varchar" MaxLength="100" />
+    <Property Name="tipoCliente" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Productos">
+    <Key>
+      <PropertyRef Name="producto_id" />
+    </Key>
+    <Property Name="producto_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="500" />
+    <Property Name="descripcion" Type="varchar" MaxLength="500" />
+    <Property Name="imagen" Type="varchar" MaxLength="500" />
+    <Property Name="precio" Type="varchar" MaxLength="25" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="username" Type="varchar" MaxLength="50" />
+    <Property Name="pass" Type="varchar" MaxLength="50" />
+    <Property Name="email" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Vendedores">
+    <Key>
+      <PropertyRef Name="vendedor_id" />
+    </Key>
+    <Property Name="vendedor_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="100" />
+    <Property Name="correo" Type="varchar" MaxLength="100" />
+    <Property Name="telefono" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Ventas">
+    <Key>
+      <PropertyRef Name="venta_id" />
+    </Key>
+    <Property Name="venta_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fecha" Type="date" />
+    <Property Name="descuento" Type="int" />
+    <Property Name="comision" Type="int" />
+    <Property Name="fvendedor_id" Type="int" />
+    <Property Name="cliente_id" Type="int" />
+  </EntityType>
+  <EntityType Name="Ventas_x_Productos">
+    <Key>
+      <PropertyRef Name="venta_x_producto_id" />
+    </Key>
+    <Property Name="venta_x_producto_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="f_venta_id" Type="int" />
+    <Property Name="f_producto_id" Type="int" />
+    <Property Name="cantidad" Type="int" />
+  </EntityType>
+  <Association Name="fk_productos">
+    <End Role="Productos" Type="Self.Productos" Multiplicity="0..1" />
+    <End Role="Ventas_x_Productos" Type="Self.Ventas_x_Productos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Productos">
+        <PropertyRef Name="producto_id" />
+      </Principal>
+      <Dependent Role="Ventas_x_Productos">
+        <PropertyRef Name="f_producto_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_vendedor_id">
+    <End Role="Vendedores" Type="Self.Vendedores" Multiplicity="0..1" />
+    <End Role="Ventas" Type="Self.Ventas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Vendedores">
+        <PropertyRef Name="vendedor_id" />
+      </Principal>
+      <Dependent Role="Ventas">
+        <PropertyRef Name="fvendedor_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_ventas">
+    <End Role="Ventas" Type="Self.Ventas" Multiplicity="0..1" />
+    <End Role="Ventas_x_Productos" Type="Self.Ventas_x_Productos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ventas">
+        <PropertyRef Name="venta_id" />
+      </Principal>
+      <Dependent Role="Ventas_x_Productos">
+        <PropertyRef Name="f_venta_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="getVentas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <EntityContainer Name="CRMModel2StoreContainer">
+    <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Productos" EntityType="Self.Productos" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Vendedores" EntityType="Self.Vendedores" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Ventas" EntityType="Self.Ventas" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Ventas_x_Productos" EntityType="Self.Ventas_x_Productos" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="fk_productos" Association="Self.fk_productos">
+      <End Role="Productos" EntitySet="Productos" />
+      <End Role="Ventas_x_Productos" EntitySet="Ventas_x_Productos" />
+    </AssociationSet>
+    <AssociationSet Name="fk_vendedor_id" Association="Self.fk_vendedor_id">
+      <End Role="Vendedores" EntitySet="Vendedores" />
+      <End Role="Ventas" EntitySet="Ventas" />
+    </AssociationSet>
+    <AssociationSet Name="fk_ventas" Association="Self.fk_ventas">
+      <End Role="Ventas" EntitySet="Ventas" />
+      <End Role="Ventas_x_Productos" EntitySet="Ventas_x_Productos" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

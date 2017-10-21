@@ -1,0 +1,260 @@
+﻿    @model CRM.Models.Venta
+    @{
+        Layout = null;
+        SelectList selectEmpleados = new SelectList(@ViewBag.listaEmpleados,"Value","Text");
+        SelectList selectClientes = new SelectList(@ViewBag.listaClientes, "Value", "Text");
+        SelectList selectProductos = new SelectList(@ViewBag.listaProductos, "Value", "Text");
+    }
+    
+    }
+
+        <!DOCTYPE html>
+        <html lang="en">
+
+        <head>
+
+            <meta charset="utf-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta name="description" content="">
+            <meta name="author" content="">
+
+            <title>SB Admin 2 - Bootstrap Admin Theme</title>
+
+            <!-- Bootstrap Core CSS -->
+            <link href="~/bootstrap.min.css" rel="stylesheet" />
+
+            <!-- MetisMenu CSS -->
+            <link href="~/metisMenu.min.css" rel="stylesheet" />
+
+            <!-- Custom CSS -->
+            <link href="~/sb-admin-2.css" rel="stylesheet" />
+
+            <!-- Custom Fonts -->
+            <link href="~/font-awesome.min.css" rel="stylesheet" />
+
+            <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+            <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+            <!--[if lt IE 9]>
+                <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+                <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+            <![endif]-->
+
+        </head>
+
+        <body>
+
+            <div id="wrapper">
+
+                <!-- Navigation -->
+                <!-- Navigation -->
+                <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="~/Home/Index">CRM</a>
+                    </div>
+                    <!-- /.navbar-header -->
+
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <em>@Session["username"]</em>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li>
+                                    <a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="/Login/Index"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                                </li>
+                            </ul>
+                            <!-- /.dropdown-user -->
+                        </li>
+                        <!-- /.dropdown -->
+                    </ul>
+                    <!-- /.navbar-top-links -->
+
+                    <div class="navbar-default sidebar" role="navigation">
+                        <div class="sidebar-nav navbar-collapse">
+                            <ul class="nav" id="side-menu">
+                                <li class="sidebar-search">
+                                    <div class="input-group custom-search-form">
+                                        <input type="text" class="form-control" placeholder="Search...">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="button">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <!-- /input-group -->
+                                </li>
+                                <li>
+                                    <a href="~/Home/Index"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                                </li>
+                                <li>
+                                    <a href="~/Cliente/Index"><i class="fa fa-dashboard fa-fw"></i> Registro de Contacto</a>
+                                </li>
+                                <li>
+                                    <a href="~/SeguimientoVentas/Index"><i class="fa fa-dashboard fa-fw"></i> Seguimiento de Ventas</a>
+                                </li>
+                                <li>
+                                    <a href="~/SeguimientoVentas/FormNewSale"><i class="fa fa-dashboard fa-fw"></i> Seguimiento de Ventas</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                        <!-- /.sidebar-collapse -->
+                    </div>
+                    <!-- /.navbar-static-side -->
+                </nav>
+
+
+                <div id="page-wrapper">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header">Registro de nueva venta</h1>
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                    <!-- /.row -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    Nueva venta
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                            @using (Html.BeginForm("addVenta", "SeguimientoVentas", FormMethod.Post))
+                                            {
+
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label>Nombre del cliente</label>
+
+                                                        @Html.DropDownListFor(model => model.cliente_id, selectClientes, "-- Seleccione un cliente --", new { @class = "form-control" })
+
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Nombre del vendedor</label>
+
+                                                        @Html.DropDownListFor(model => model.fvendedor_id, selectEmpleados, "-- Seleccione un empleado --", new { @class = "form-control" })
+
+                                                    </div>
+                                                    <div class="form-group">
+
+                                                        <label>Fecha en que se realizó la venta</label>
+                                                        @Html.EditorFor(model => model.fecha, new { htmlAttributes = new { @class = "form-control", @type = "date" } })
+
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label>Agregar producto(s)</label>
+                                                                @Html.DropDownList("selectProductos", selectProductos, "-- Seleccione un producto --", new { @class = "form-control" })
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label>Cantidad</label>
+                                                                <input class="form-control" id="cantidadProductos" name="cantidadProductos" type="number" min="0" />
+                                                                <input type="button" class="btn-success btn-xs pull-right" value="Agregar" id="btnAgregar" />
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+
+                                                                <label>Porcentaje de descuento</label>
+                                                                @Html.EditorFor(model => model.descuento, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @max = "100" } })
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+
+                                                                <label>Porcentaje de comisión</label>
+                                                                @Html.EditorFor(model => model.comision, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @max = "100" } })
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+
+
+                                                    <input type="submit" class="btn btn-default" value="Registrar Venta"></input>
+
+
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="row">
+                                                        <div class="form-group">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-bordered table-condensed" id="tablaProductos">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Producto</th>
+                                                                            <th>Precio por Unidad</th>
+                                                                            <th>Cantidad</th>
+                                                                            <th>Precio total</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody></tbody>
+                                                                </table>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group">
+                                                            @Html.HiddenFor(model => model.productolista);
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                    }
+                                                </div>
+                                    <!-- /.row (nested) -->
+                                </div>
+                                <!-- /.panel-body -->
+                            </div>
+                            <!-- /.panel -->
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /#page-wrapper -->
+
+            </div>
+            <!-- /#wrapper -->
+            <!-- jQuery -->
+            <script src="~/Scripts/jquery.min.js"></script>
+
+            <script src="~/Scripts/NewSaleCntrllr.js"></script>
+            <!-- Bootstrap Core JavaScript -->
+            <script src="~/Scripts/bootstrap.min.js"></script>
+
+            <!-- Metis Menu Plugin JavaScript -->
+            <script src="~/Scripts/metisMenu.min.js"></script>
+
+            <!-- Custom Theme JavaScript -->
+            <script src="~/Scripts/sb-admin-2.js"></script>
+
+        </body>
+
+    </html>
+

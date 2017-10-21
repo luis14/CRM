@@ -1,0 +1,257 @@
+﻿@model CRM.Models.Cliente
+@{
+    Layout = null;
+    List<SelectListItem> listPaises = new List<SelectListItem>();
+    listPaises.Add(new SelectListItem
+    {
+        Text = "Costa Rica",
+        Value = "Costa Rica"
+    });
+    listPaises.Add(new SelectListItem
+    {
+        Text = "El Salvador",
+        Value = "El Salvador"
+    });
+    listPaises.Add(new SelectListItem
+    {
+        Text = "Honduras",
+        Value = "Honduras"
+    });
+    listPaises.Add(new SelectListItem
+    {
+        Text = "Guatemala",
+        Value = "Guatemala"
+    });
+    listPaises.Add(new SelectListItem
+    {
+        Text = "Belice",
+        Value = "Belice"
+    });
+    listPaises.Add(new SelectListItem
+    {
+        Text = "Nicaragua",
+        Value = "Nicaragua"
+    });
+    listPaises.Add(new SelectListItem
+    {
+        Text = "Mexico",
+        Value = "Mexico"
+    });
+    listPaises.Add(new SelectListItem
+    {
+        Text = "Panama",
+        Value = "Panama"
+    });
+    listPaises.Add(new SelectListItem
+    {
+        Text = "Colombia",
+        Value = "Colombia"
+    });
+
+    List<SelectListItem> listTipoCliente = new List<SelectListItem>();
+    listTipoCliente.Add(new SelectListItem
+    {
+        Text = "Persona",
+        Value = "Persona"
+    });
+    listTipoCliente.Add(new SelectListItem
+    {
+        Text = "Empresa",
+        Value = "Empresa"
+    });
+}
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="~/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- MetisMenu CSS -->
+    <link href="~/metisMenu.min.css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link href="~/sb-admin-2.css" rel="stylesheet" />
+
+    <!-- Custom Fonts -->
+    <link href="~/font-awesome.min.css" rel="stylesheet" />
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="~/Home/Index">CRM</a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <em>@Session["username"]</em>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li>
+                            <a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="/Login/Index"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li class="sidebar-search">
+                            <div class="input-group custom-search-form">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                            <!-- /input-group -->
+                        </li>
+                        <li>
+                            <a href="~/Home/Index"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="~/Cliente/Index"><i class="fa fa-dashboard fa-fw"></i> Registro de Contacto</a>
+                        </li>
+                        <li>
+                            <a href="~/SeguimientoVentas/Index"><i class="fa fa-dashboard fa-fw"></i> Seguimiento de Ventas</a>
+                        </li>
+                        <li>
+                            <a href="~/SeguimientoVentas/FormNewSale"><i class="fa fa-dashboard fa-fw"></i> Seguimiento de Ventas</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Registro de nuevo cliente</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Nuevo cliente
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    @using (Html.BeginForm("addCliente","Cliente",FormMethod.Post))
+                                    {
+                                        <div class="form-group">
+                                            <label>Tipo de cliente</label> 
+
+                                            @Html.DropDownListFor(model => model.tipoCliente, listTipoCliente, "-- Seleccione un tipo --", new { @class = "form-control"})
+                                            
+                                        </div>
+                                        <div class="form-group">
+                                            
+                                           <label>Nombre</label>
+                                           @Html.EditorFor(model => model.nombre, new { htmlAttributes = new { @class = "form-control" } })
+                                            
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Pais</label>
+                                            @Html.DropDownListFor(model => model.pais, listPaises, "-- Selecione un pais --", new { @class = "form-control" })
+                                            
+                                        </div>
+                                        <div class="form-group">
+
+                                            <label>Correo</label>
+                                            @Html.EditorFor(model => model.correo, new { htmlAttributes = new { @class = "form-control" } })
+
+                                        </div>
+                                        <div class="form-group">
+
+                                            <label>Telefono</label>
+                                            @Html.EditorFor(model => model.telefono, new { htmlAttributes = new { @class = "form-control" } })
+
+
+                                        </div>
+
+                                            <input type="submit" class="btn btn-default" value="Agregar cliente"></input>
+                                    }
+                                </div>
+                            </div>
+                            <!-- /.row (nested) -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+    <!-- jQuery -->
+    <script src="~/Scripts/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="~/Scripts/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="~/Scripts/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="~/Scripts/sb-admin-2.js"></script>
+
+</body>
+
+</html>

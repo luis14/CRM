@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CRMModel2" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="CRMEntities3" annotation:LazyLoadingEnabled="true">
+    <FunctionImport Name="getVentas" ReturnType="Collection(CRMModel2.getVentas_Result)" />
+    <EntitySet Name="Clientes" EntityType="CRMModel2.Cliente" />
+    <EntitySet Name="Productos" EntityType="CRMModel2.Producto" />
+    <EntitySet Name="Users" EntityType="CRMModel2.User" />
+    <EntitySet Name="Vendedores" EntityType="CRMModel2.Vendedore" />
+    <EntitySet Name="Ventas" EntityType="CRMModel2.Venta" />
+    <EntitySet Name="Ventas_x_Productos" EntityType="CRMModel2.Ventas_x_Productos" />
+    <AssociationSet Name="fk_productos" Association="CRMModel2.fk_productos">
+      <End Role="Producto" EntitySet="Productos" />
+      <End Role="Ventas_x_Productos" EntitySet="Ventas_x_Productos" />
+    </AssociationSet>
+    <AssociationSet Name="fk_vendedor_id" Association="CRMModel2.fk_vendedor_id">
+      <End Role="Vendedore" EntitySet="Vendedores" />
+      <End Role="Venta" EntitySet="Ventas" />
+    </AssociationSet>
+    <AssociationSet Name="fk_ventas" Association="CRMModel2.fk_ventas">
+      <End Role="Venta" EntitySet="Ventas" />
+      <End Role="Ventas_x_Productos" EntitySet="Ventas_x_Productos" />
+    </AssociationSet>
+  </EntityContainer>
+  <ComplexType Name="getVentas_Result">
+    <Property Type="DateTime" Name="fecha" Nullable="true" />
+    <Property Type="Int32" Name="descuento" Nullable="true" />
+    <Property Type="Int32" Name="comision" Nullable="true" />
+    <Property Type="String" Name="nombreVendedor" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="nombreCliente" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="totalVenta" Nullable="true" />
+  </ComplexType>
+  <EntityType Name="Cliente">
+    <Key>
+      <PropertyRef Name="cliente_id" />
+    </Key>
+    <Property Name="cliente_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="pais" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="correo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="telefono" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="tipoCliente" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Producto">
+    <Key>
+      <PropertyRef Name="producto_id" />
+    </Key>
+    <Property Name="producto_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="descripcion" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="imagen" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="precio" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Ventas_x_Productos" Relationship="CRMModel2.fk_productos" FromRole="Producto" ToRole="Ventas_x_Productos" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="pass" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Vendedore">
+    <Key>
+      <PropertyRef Name="vendedor_id" />
+    </Key>
+    <Property Name="vendedor_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="correo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="telefono" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Ventas" Relationship="CRMModel2.fk_vendedor_id" FromRole="Vendedore" ToRole="Venta" />
+  </EntityType>
+  <EntityType Name="Venta">
+    <Key>
+      <PropertyRef Name="venta_id" />
+    </Key>
+    <Property Name="venta_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fecha" Type="DateTime" Precision="0" />
+    <Property Name="descuento" Type="Int32" />
+    <Property Name="comision" Type="Int32" />
+    <Property Name="fvendedor_id" Type="Int32" />
+    <Property Name="cliente_id" Type="Int32" />
+    <NavigationProperty Name="Vendedore" Relationship="CRMModel2.fk_vendedor_id" FromRole="Venta" ToRole="Vendedore" />
+    <NavigationProperty Name="Ventas_x_Productos" Relationship="CRMModel2.fk_ventas" FromRole="Venta" ToRole="Ventas_x_Productos" />
+  </EntityType>
+  <EntityType Name="Ventas_x_Productos">
+    <Key>
+      <PropertyRef Name="venta_x_producto_id" />
+    </Key>
+    <Property Name="venta_x_producto_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="f_venta_id" Type="Int32" />
+    <Property Name="f_producto_id" Type="Int32" />
+    <Property Name="cantidad" Type="Int32" />
+    <NavigationProperty Name="Producto" Relationship="CRMModel2.fk_productos" FromRole="Ventas_x_Productos" ToRole="Producto" />
+    <NavigationProperty Name="Venta" Relationship="CRMModel2.fk_ventas" FromRole="Ventas_x_Productos" ToRole="Venta" />
+  </EntityType>
+  <Association Name="fk_productos">
+    <End Type="CRMModel2.Producto" Role="Producto" Multiplicity="0..1" />
+    <End Type="CRMModel2.Ventas_x_Productos" Role="Ventas_x_Productos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Producto">
+        <PropertyRef Name="producto_id" />
+      </Principal>
+      <Dependent Role="Ventas_x_Productos">
+        <PropertyRef Name="f_producto_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_vendedor_id">
+    <End Type="CRMModel2.Vendedore" Role="Vendedore" Multiplicity="0..1" />
+    <End Type="CRMModel2.Venta" Role="Venta" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Vendedore">
+        <PropertyRef Name="vendedor_id" />
+      </Principal>
+      <Dependent Role="Venta">
+        <PropertyRef Name="fvendedor_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_ventas">
+    <End Type="CRMModel2.Venta" Role="Venta" Multiplicity="0..1" />
+    <End Type="CRMModel2.Ventas_x_Productos" Role="Ventas_x_Productos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Venta">
+        <PropertyRef Name="venta_id" />
+      </Principal>
+      <Dependent Role="Ventas_x_Productos">
+        <PropertyRef Name="f_venta_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

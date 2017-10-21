@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CRMModel1.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Clientes">
+    <Key>
+      <PropertyRef Name="cliente_id" />
+    </Key>
+    <Property Name="cliente_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="100" />
+    <Property Name="pais" Type="varchar" MaxLength="100" />
+    <Property Name="correo" Type="varchar" MaxLength="100" />
+    <Property Name="telefono" Type="varchar" MaxLength="100" />
+    <Property Name="tipoCliente" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityContainer Name="CRMModel1StoreContainer">
+    <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>
