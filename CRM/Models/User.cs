@@ -14,8 +14,8 @@ namespace CRM.Models
     
     public partial class User
     {
-        public string errorMessage;
-        public object repeatPass;
+        public string errorMessage { get; set; }
+        public string repeatPass { get; set; }
 
         public int ID { get; set; }
         public string username { get; set; }

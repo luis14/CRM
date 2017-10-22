@@ -49,14 +49,14 @@
                         <label>
                            Password<span class="req">*</span>
                         </label>
-                        @Html.EditorFor(model => model.pass)
+                        @Html.EditorFor(model => model.pass , new { htmlAttributes = new { @type = "password" } })
                     </div>
 
                     <div class="field-wrap">
                         <label>
                             Repita el password<span class="req">*</span>
                         </label>
-                        @Html.EditorFor(model => model.repeatPass)
+                        @Html.EditorFor(model => model.repeatPass, new { htmlAttributes = new {  @type = "password" } })
                     </div>
                     
                     <input type="submit" name="name" value="Registrarse" />
