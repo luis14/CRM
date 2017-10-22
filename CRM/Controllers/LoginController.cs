@@ -14,25 +14,34 @@ namespace CRM.Controllers
         {
             return View();
         }
+
+        public Boolean userIsValid(CRM.Models.User usuarioNoIdentificado) {
+            bool esValido = false;
+
+            using (CRMEntities db = new CRMEntities())
+            {
+                var userDetails = db.Users.Where(x => x.username == usuarioNoIdentificado.username && x.pass == usuarioNoIdentificado.pass).FirstOrDefault();
+                if (userDetails != null)
+                {
+                    esValido = true;
+                }
+                
+            }
+                return esValido;
+        }
         [HttpPost]
         public ActionResult Autherize(CRM.Models.User userModel)
         {
-            using (CRMEntities db = new CRMEntities())
-            {
-                var userDetails = db.Users.Where( x => x.username == userModel.username && x.pass == userModel.pass).FirstOrDefault();
-                if (userDetails == null)
-                {
-                    userModel.errorMessage = "Usuario o contrasena incorrectos";
-                    return View("Index", userModel);
-                }
-                else {
-                    Session["userID"] = userDetails.ID;
-                    Session["username"] = userDetails.username;
-                    ViewBag.username = Session["username"];
-                    return RedirectToAction("Index", "Home");
-                }
+            if (userIsValid(userModel)) {
+                Session["username"] = userModel.username;
+                ViewBag.username = Session["username"];
+                return RedirectToAction("Index", "Home");
             }
-                
+            else
+            {
+                userModel.errorMessage = "Usuario o contrasena incorrectos";
+                return View("Index", userModel);
+            }   
         }
         [HttpPost]
         public ActionResult Register(CRM.Models.User userModel)
