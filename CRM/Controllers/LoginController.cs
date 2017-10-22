@@ -7,7 +7,15 @@ using System.Web.Mvc;
 
 namespace CRM.Controllers
 {
-    public class LoginController : Controller
+    public interface ILogin
+    {
+         Boolean userIsValid(CRM.Models.User usuarioNoIdentificado);
+         ActionResult Autherize(CRM.Models.User userModel);
+         ActionResult Register(CRM.Models.User userModel);
+
+
+    }
+    public class LoginController : Controller, ILogin
     {
         // GET: Login
         public ActionResult Index()
