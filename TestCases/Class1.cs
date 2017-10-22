@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CRM;
 using CRM.Controllers;
+using CRM.Models;
 
 namespace TestCases
 {
@@ -15,7 +16,11 @@ namespace TestCases
     {
         public void isValidUser()
         {
-            var Login = Substitute.For<LoginController>();
+            var login = Substitute.For<LoginController>();
+            var fakeUser = Substitute.For<User>();
+            fakeUser.username = "luis";
+            fakeUser.pass = "luis1234"
+            login.Autherize(fakeUser).Returns();
 
         }
         
