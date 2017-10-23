@@ -12,12 +12,35 @@ namespace CRM.Controllers
 {
     public class SeguimientoVentasController : Controller
     {
+        public double getDescuento(int? totalVenta, int? descuento)
+        {
+            double totalDescuento = (double)totalVenta * (double)descuento * 0.01;
+
+            return totalDescuento;
+
+        }
+
+        public double getComision(int? totalVenta, int? comision) {
+            double totalComision = (double)totalVenta * (double)comision * 0.01;
+            return totalComision;
+        }
+        public int? getTotalVenta(int? montoTotal, int? descuento, int? comision) {
+            double descuentoAplicado = getDescuento(montoTotal, descuento);
+            double comisionAplicada = getComision(montoTotal, comision);
+            int? totalVenta = montoTotal - (int)descuentoAplicado - (int)comisionAplicada;
+            return totalVenta;
+        }
+
         // GET: SeguimientoVentas
         public ActionResult Index()
         {
             var ventas = new CRMEntities3();
-            var getVentas = ventas.getVentas();
-            ViewBag.listaVentas = getVentas.ToList();
+            var getVentas = ventas.getVentas().ToList();
+            for (int i = 0; i < getVentas.Count; i++) {
+                var venta = getVentas.ElementAt(i);
+                venta.totalVenta = getTotalVenta(venta.totalVenta, venta.descuento, venta.comision);
+            }
+            ViewBag.listaVentas = getVentas;
             return View();
         }
 
@@ -60,6 +83,7 @@ namespace CRM.Controllers
             var ventaId = -1;
             using (CRMEntities3 db = new CRMEntities3())
             {
+                
                
                 var insert = db.Ventas.Add(venta);
                 db.SaveChanges();

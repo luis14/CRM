@@ -12,19 +12,30 @@ namespace CRM.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    
-    public partial class CRMEntities : DbContext
+
+    public interface ICRMEntities {
+
+         DbSet<User> Users { get; set; }
+      void OnModelCreating(DbModelBuilder modelBuilder);
+
+    }
+
+
+
+    public partial class CRMEntities : DbContext,ICRMEntities
     {
         public CRMEntities()
             : base("name=CRMEntities")
         {
         }
     
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+          public void  OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
+            
         }
-    
+
+
         public virtual DbSet<User> Users { get; set; }
     }
 }
