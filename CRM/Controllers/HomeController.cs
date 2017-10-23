@@ -14,8 +14,8 @@ namespace CRM.Controllers
         {
             var clientes = new CRMEntities1();
             ViewBag.clientList = clientes.Clientes.ToList();
-            ViewBag.username = Session["username"];
-            Console.Write("Nombre de usuario> " + ViewBag.username);
+           // ViewBag.username = Session["username"];
+            //Console.Write("Nombre de usuario> " + ViewBag.username);
             return View();
         }
     }

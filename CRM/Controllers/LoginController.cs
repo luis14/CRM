@@ -20,17 +20,17 @@ namespace CRM.Controllers
         // GET: Login
 
         private ICRMEntities db = new CRMEntities();
-        private Register registerObject;
+
         public LoginController(ICRMEntities p_db)
         {
             db = p_db;
         }
-
+        /*
         public LoginController(Register preg) {
             registerObject = preg;
-        }
+        }*/
         public LoginController() {
-            registerObject = new Register();
+            //registerObject = new Register();
         }
         public ActionResult Index()
         {
@@ -53,22 +53,23 @@ namespace CRM.Controllers
         [HttpPost]
         public ActionResult Autherize(CRM.Models.User userModel)
         {
-            if (userModel.username.Equals("") || userModel.pass.Equals(""))
+            if (userModel.username==null || userModel.pass== null)
             {
                 userModel.errorMessage = "Debe llenar los campos solicitados";
                 return View("Index", userModel);
             }
             else { 
-            if (Register.validateUser(userModel)) {
-                Session["username"] = userModel.username;
-                ViewBag.username = Session["username"];
-                return RedirectToAction("Index", "Home");
-            }
-            else
-            {
-                userModel.errorMessage = "Usuario o contrasena incorrectos";
-                return View("Index", userModel);
-            }
+                if (userIsValid(userModel)) {
+                    string username = userModel.username;
+                    Session["username"] = username;
+                    ViewBag.username = Session["username"];
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    userModel.errorMessage = "Usuario o contrasena incorrectos";
+                    return View("Index", userModel);
+                }
             }
 
         }
@@ -78,14 +79,12 @@ namespace CRM.Controllers
         {
             using (CRMEntities db = new CRMEntities())
             {
-                if (userIsValid(userModel)) {
+                if (Register.validateUser(userModel)) {
 
-                   
+                    Register registerObject = new Register();
                     registerObject.RegisterUser(userModel);
-                    //  var userInsert = db.Users.Add(userModel);
-                    //db.SaveChanges();
-                    //Autherize(userInsert);
-                    return null;
+
+                    return View("Index", userModel);
 
                 }
               
@@ -126,7 +125,7 @@ namespace CRM.Controllers
         public static Boolean validateUser(User pUser) {
             Boolean userIsValid = true;
 
-            if (pUser.email.Equals("") || pUser.username.Equals("") || pUser.pass.Equals("") || pUser.repeatPass.Equals("")) {
+            if (pUser.email == null || pUser.username == null || pUser.pass == null || pUser.repeatPass == null) {
                 userIsValid = false;
                 pUser.errorMessage = "Debe llenar todos campos";
             }
@@ -167,7 +166,6 @@ namespace CRM.Controllers
             CRMEntities db = new CRMEntities();
             var userInserted = db.Users.Add(user);
             db.SaveChanges();
-            login.Autherize(user);
             return userInserted;
         }
 
