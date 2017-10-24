@@ -7,15 +7,8 @@ using System.Web.Mvc;
 
 namespace CRM.Controllers
 {
-    public interface ILogin
-    {
-         Boolean userIsValid(CRM.Models.User usuarioNoIdentificado);
-         ActionResult Autherize(CRM.Models.User userModel);
-         ActionResult register(CRM.Models.User userModel);
-
-
-    }
-    public class LoginController : Controller, ILogin
+   
+    public class LoginController : Controller
     {
         // GET: Login
 
@@ -38,27 +31,27 @@ namespace CRM.Controllers
         }
 
         public Boolean userIsValid(CRM.Models.User usuarioNoIdentificado) {
- 
+
             bool esValido = false;
-            
-                var userDetails = db.Users.Where(x => x.username == usuarioNoIdentificado.username && x.pass == usuarioNoIdentificado.pass).FirstOrDefault();
-                if (userDetails != null)
-                {
-                    esValido = true;
-                }
-                
-            
-                return esValido;
+
+            var userDetails = db.Users.Where(x => x.username == usuarioNoIdentificado.username && x.pass == usuarioNoIdentificado.pass).FirstOrDefault();
+            if (userDetails != null)
+            {
+                esValido = true;
+            }
+
+
+            return esValido;
         }
         [HttpPost]
         public ActionResult Autherize(CRM.Models.User userModel)
         {
-            if (userModel.username==null || userModel.pass== null)
+            if (userModel.username == null || userModel.pass == null)
             {
                 userModel.errorMessage = "Debe llenar los campos solicitados";
                 return View("Index", userModel);
             }
-            else { 
+            else {
                 if (userIsValid(userModel)) {
                     string username = userModel.username;
                     Session["username"] = username;
@@ -76,34 +69,32 @@ namespace CRM.Controllers
 
         [HttpPost]
         public ActionResult register(CRM.Models.User userModel)
-        {
-            using (CRMEntities db = new CRMEntities())
-            {
-                if (Register.validateUser(userModel)) {
-
-                    Register registerObject = new Register();
-                    registerObject.RegisterUser(userModel);
-
-                    return View("Index", userModel);
-
-                }
-              
-                else {
-
-                    return View("Index", userModel);
-                }
-            }
-
+        {    
+           Register registerObject = new Register();
+           registerObject.RegisterUser(userModel);
+           return View("Index", userModel);
         }
 
 
     }
 
     public class Register {
-        public ILogin login;
 
-        public Register() {
-            login = new LoginController();
+        IAddUserToDabase database = new AddUserToDatabase();
+
+        public Register(IAddUserToDabase pdatabase) {
+            database = pdatabase;
+        }
+        public Register() { }
+
+        public void RegisterUser(User pUser)
+        {
+            if (Register.validateUser(pUser))
+            {
+               database.insertUserIntoDatabase(pUser);
+            
+            }
+
         }
         public static Boolean passwordIsValid(String newPass)
         {
@@ -133,8 +124,8 @@ namespace CRM.Controllers
                 userIsValid = false;
                 pUser.errorMessage = "Las contrasenas no concuerdan";
             }
-             ICRMEntities db = new CRMEntities();
-             var userDetails = db.Users.Where(x => x.username == pUser.username ).FirstOrDefault();
+            ICRMEntities db = new CRMEntities();
+            var userDetails = db.Users.Where(x => x.username == pUser.username).FirstOrDefault();
 
 
             if (userDetails != null)
@@ -142,7 +133,7 @@ namespace CRM.Controllers
                 userIsValid = false;
                 pUser.errorMessage = "El username ya existe";
             }
-            userDetails = db.Users.Where(x =>  x.email.ToUpper() == pUser.email.ToUpper()).FirstOrDefault();
+            userDetails = db.Users.Where(x => x.email.ToUpper() == pUser.email.ToUpper()).FirstOrDefault();
 
             if (userDetails != null)
             {
@@ -161,19 +152,28 @@ namespace CRM.Controllers
             return userIsValid;
         }
 
-        public Register(ILogin pLogin)
-        {
-            login = pLogin;
-        }
 
-        public User RegisterUser(User user)
-        {
+
+
+    }
+    public interface IAddUserToDabase{
+        Boolean insertUserIntoDatabase(User user);
+    }
+
+    public class AddUserToDatabase:IAddUserToDabase
+    {
+        public Boolean insertUserIntoDatabase(User user) {
+            Boolean insertoCorrectamente = false;
             CRMEntities db = new CRMEntities();
             var userInserted = db.Users.Add(user);
             db.SaveChanges();
-            return userInserted;
-        }
+            if(userInserted != null) {
+                insertoCorrectamente = true;
+            }
 
+            return insertoCorrectamente;
+
+        }
 
     }
 }

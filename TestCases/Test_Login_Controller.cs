@@ -48,14 +48,13 @@ namespace TestCases
         }
 
         [Category("Registro")]
-        [Ignore("esta registrando y no deberia")]
-        [TestCase("luisralfaro","luis123","luis123","luis1234@mail.com")]
-        public void registerUser_validUser_ReturnTrue(String username, String pass, String repeatPass, String email) {
-            ILogin fakeLogin = Substitute.For<ILogin>();
-            Register register = new Register(fakeLogin);
+        [TestCase("luisralfaro","luis123","luis123","luis1234@mail.com",null)]
+        public void registerUser_validUser_ReturnTrue(String username, String pass, String repeatPass, String email,String expected) {
+            IAddUserToDabase fakeDatabase = Substitute.For<IAddUserToDabase>();
             User usuario = new User { username = username, pass = pass, repeatPass = repeatPass, email = email};
-            fakeLogin.userIsValid(usuario).Returns(true);
-            Assert.AreEqual(register.RegisterUser(usuario).username,usuario.username);
+            fakeDatabase.insertUserIntoDatabase(usuario).Returns(true);
+            Register register = new Register(fakeDatabase);
+            Assert.AreEqual(usuario.errorMessage,expected);
         }
 
 
