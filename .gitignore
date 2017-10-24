@@ -1,1 +1,7 @@
 *.suo
+.vs/CRM/v14/.suo
+CRM/bin/CRM.pdb
+*.cache
+CRM/obj/Debug/CRM.dll
+*.tmp
+CRM/bin/CRM.dll
