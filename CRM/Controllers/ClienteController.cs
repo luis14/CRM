@@ -19,14 +19,33 @@ namespace CRM.Controllers
         public ActionResult addCliente(CRM.Models.Cliente cliente)
         {
             using (CRMEntities1 db = new CRMEntities1()) {
-                if (clienteEsValido(cliente)) { 
-                    var insert = db.Clientes.Add(cliente);
-                    db.SaveChanges();
-                    return RedirectToAction("Index", "Home");
+                if (clienteEsValido(cliente)) {
+                    var insertoCorrectamente = insertClientToDatabase(db, cliente);
+
+                    if (insertoCorrectamente)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else {
+                        cliente.errorMsj = "Error al guardar en la BD";
+                        return View("Index", cliente);
+                    }
                 }
                 else{
                     return View("Index", cliente);
                 }
+            }
+        }
+
+        public Boolean insertClientToDatabase(CRMEntities1 db, Cliente cliente) {
+            var insert = db.Clientes.Add(cliente);
+            db.SaveChanges();
+            if (insert != null) { 
+            return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
