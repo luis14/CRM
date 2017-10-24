@@ -20,5 +20,6 @@ namespace CRM.Models
         public string correo { get; set; }
         public string telefono { get; set; }
         public string tipoCliente { get; set; }
+        public string errorMsj { get; set; }
     }
 }

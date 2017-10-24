@@ -10,14 +10,14 @@ namespace TestCases
 {
     [TestFixture]
     class Test_Seguimiento_Ventas_Controller
-    {
+    {   [Category("Ventas")]
         [TestCase(20000,10,2000)]
         public void getDescuento_intValues_ReturnCorrectDiscoint(int totalVenta, int descuento, int resultadoEsperado) {
             SeguimientoVentasController segVentas = new SeguimientoVentasController();
             Assert.AreEqual(segVentas.getDescuento(totalVenta, descuento),resultadoEsperado);
 
         }
-
+        [Category("Ventas")]
         [TestCase(20000, 10, 2000)]
         public void getComision_intValues_ReturnCorrectDiscoint(int totalVenta, int comision, int resultadoEsperado)
         {
@@ -25,7 +25,7 @@ namespace TestCases
             Assert.AreEqual(segVentas.getComision(totalVenta, comision), resultadoEsperado);
 
         }
-
+        [Category("Ventas")]
         [TestCase(20000, 10,5, 17000)]
         public void getTotalVenta_intValues_ReturnCorrectDiscoint(int totalVenta, int comision,int descuento, int resultadoEsperado)
         {

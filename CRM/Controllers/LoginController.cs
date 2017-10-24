@@ -142,7 +142,7 @@ namespace CRM.Controllers
                 userIsValid = false;
                 pUser.errorMessage = "El username ya existe";
             }
-            userDetails = db.Users.Where(x => x.email == pUser.email).FirstOrDefault();
+            userDetails = db.Users.Where(x =>  x.email.ToUpper() == pUser.email.ToUpper()).FirstOrDefault();
 
             if (userDetails != null)
             {
@@ -152,6 +152,11 @@ namespace CRM.Controllers
             if (!passwordIsValid(pUser.pass)) {
                 userIsValid = false;
                 pUser.errorMessage = "La contrasena debe tener al menos 7 caracteres y  1 Uppercase";
+            }
+
+            if (!ClienteController.isValidEmail(pUser.email)) {
+                userIsValid = false;
+                pUser.errorMessage = "El correo no es válido";
             }
             return userIsValid;
         }
