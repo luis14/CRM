@@ -18,9 +18,9 @@ namespace CRM.Controllers
         [HttpPost]
         public ActionResult addCliente(CRM.Models.Cliente cliente)
         {
-            using (CRMEntities1 db = new CRMEntities1()) {
+            
                 if (clienteEsValido(cliente)) {
-                    var insertoCorrectamente = insertClientToDatabase(db, cliente);
+                    var insertoCorrectamente = insertClientToDatabase(cliente);
 
                     if (insertoCorrectamente)
                     {
@@ -34,10 +34,11 @@ namespace CRM.Controllers
                 else{
                     return View("Index", cliente);
                 }
-            }
+            
         }
 
-        public Boolean insertClientToDatabase(CRMEntities1 db, Cliente cliente) {
+        public Boolean insertClientToDatabase(Cliente cliente) {
+            CRMEntities1 db = new CRMEntities1();
             var insert = db.Clientes.Add(cliente);
             db.SaveChanges();
             if (insert != null) { 

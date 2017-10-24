@@ -5,3 +5,6 @@ CRM/bin/CRM.pdb
 CRM/obj/Debug/CRM.dll
 *.tmp
 CRM/bin/CRM.dll
+*.suo
+*.pdb
+*.dll
