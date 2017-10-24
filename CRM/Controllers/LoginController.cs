@@ -115,39 +115,46 @@ namespace CRM.Controllers
         }
         public static Boolean validateUser(User pUser) {
             Boolean userIsValid = true;
+            try {
+                if (pUser.email == null || pUser.username == null || pUser.pass == null || pUser.repeatPass == null) {
+                    userIsValid = false;
+                    pUser.errorMessage = "Debe llenar todos campos";
+                }
+                else if (!pUser.pass.Equals(pUser.repeatPass)) {
+                    userIsValid = false;
+                    pUser.errorMessage = "Las contrasenas no concuerdan";
+                }
+                ICRMEntities db = new CRMEntities();
+                var userDetails = db.Users.Where(x => x.username == pUser.username).FirstOrDefault();
 
-            if (pUser.email == null || pUser.username == null || pUser.pass == null || pUser.repeatPass == null) {
-                userIsValid = false;
+
+                if (userDetails != null)
+                {
+                    userIsValid = false;
+                    pUser.errorMessage = "El username ya existe";
+                }
+
+                userDetails = db.Users.Where(x => x.email.ToUpper() == pUser.email.ToUpper()).FirstOrDefault();
+
+                if (userDetails != null)
+                {
+                    userIsValid = false;
+                    pUser.errorMessage = "El email ya existe";
+                }
+                else if (!passwordIsValid(pUser.pass)) {
+                    userIsValid = false;
+                    pUser.errorMessage = "La contrasena debe tener al menos 7 caracteres y  1 Uppercase";
+                }
+
+                else if (!ClienteController.isValidEmail(pUser.email)) {
+                    userIsValid = false;
+                    pUser.errorMessage = "El correo no es válido";
+                }
+            }
+            catch (Exception)
+            {
+
                 pUser.errorMessage = "Debe llenar todos campos";
-            }
-            if (!pUser.pass.Equals(pUser.repeatPass)) {
-                userIsValid = false;
-                pUser.errorMessage = "Las contrasenas no concuerdan";
-            }
-            ICRMEntities db = new CRMEntities();
-            var userDetails = db.Users.Where(x => x.username == pUser.username).FirstOrDefault();
-
-
-            if (userDetails != null)
-            {
-                userIsValid = false;
-                pUser.errorMessage = "El username ya existe";
-            }
-            userDetails = db.Users.Where(x => x.email.ToUpper() == pUser.email.ToUpper()).FirstOrDefault();
-
-            if (userDetails != null)
-            {
-                userIsValid = false;
-                pUser.errorMessage = "El email ya existe";
-            }
-            if (!passwordIsValid(pUser.pass)) {
-                userIsValid = false;
-                pUser.errorMessage = "La contrasena debe tener al menos 7 caracteres y  1 Uppercase";
-            }
-
-            if (!ClienteController.isValidEmail(pUser.email)) {
-                userIsValid = false;
-                pUser.errorMessage = "El correo no es válido";
             }
             return userIsValid;
         }

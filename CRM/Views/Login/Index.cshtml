@@ -25,51 +25,7 @@
         </ul>
 
         <div class="tab-content">
-            <div id="signup">
-                <h1>Registro de usuario</h1>
-                    @using (Html.BeginForm("register", "Login", FormMethod.Post))
-                    {
-                    <div class="top-row">
-                        <div class="field-wrap">
-                            <label>
-                               Username<span class="req">*</span>
-                            </label>
-                            @Html.EditorFor(model => model.username)
-                        </div>
-
-                        <div class="field-wrap">
-                            <label>
-                                Email<span class="req">*</span>
-                            </label>
-                            @Html.EditorFor(model => model.email)
-                        </div>
-                    </div>
-
-                    <div class="field-wrap">
-                        <label>
-                           Password<span class="req">*</span>
-                        </label>
-                        @Html.EditorFor(model => model.pass , new { htmlAttributes = new { @type = "password" } })
-                    </div>
-
-                    <div class="field-wrap">
-                        <label>
-                            Repita el password<span class="req">*</span>
-                        </label>
-                        @Html.EditorFor(model => model.repeatPass, new { htmlAttributes = new {  @type = "password" } })
-                    </div>
-                    
-                    <input type="submit" name="name" value="Registrarse" />
-
-                    <div class="field-wrap">
-                        <label>
-                            @Html.DisplayFor(model => model.errorMessage)
-                        </label>
-
-                    </div>
-                    }
-
-
+            
             <div id="login">
                 <h1>Inicio de sesion</h1>
 
@@ -98,6 +54,53 @@
                 }
 
             </div>
+            <div id="signup">
+                <h1>Registro de usuario</h1>
+                @using (Html.BeginForm("register", "Login", FormMethod.Post))
+                {
+                    <div class="top-row">
+                        <div class="field-wrap">
+                            <label>
+                                Username<span class="req">*</span>
+                            </label>
+                            @Html.EditorFor(model => model.username)
+                        </div>
+
+                        <div class="field-wrap">
+                            <label>
+                                Email<span class="req">*</span>
+                            </label>
+                            @Html.EditorFor(model => model.email)
+                        </div>
+                    </div>
+
+                    <div class="field-wrap">
+                        <label>
+                            Password<span class="req">*</span>
+                        </label>
+                        @Html.EditorFor(model => model.pass, new { htmlAttributes = new { @type = "password" } })
+                    </div>
+
+                    <div class="field-wrap">
+                        <label>
+                            Repita el password<span class="req">*</span>
+                        </label>
+                        @Html.EditorFor(model => model.repeatPass, new { htmlAttributes = new { @type = "password" } })
+                    </div>
+
+                    <input type="submit" name="name" value="Registrarse" />
+
+                    <div class="field-wrap">
+                        <label>
+                            @Html.DisplayFor(model => model.errorMessage)
+                        </label>
+
+                    </div>
+                }
+
+            </div>
+
+
 
         </div><!-- tab-content -->
 
