@@ -8,8 +8,39 @@ using System.Web.Mvc;
 
 namespace CRM.Controllers
 {
+    public interface IAddCliente
+    {
+        Boolean insertClientToDatabase(CRM.Models.Cliente clienteNoRegistrado);
+    }
+
+    public class AddCliente : IAddCliente
+    {
+        public Boolean insertClientToDatabase(Cliente cliente)
+        {
+            CRMEntities1 db = new CRMEntities1();
+            var insert = db.Clientes.Add(cliente);
+            db.SaveChanges();
+            if (insert != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
     public class ClienteController : Controller
     {
+        IAddCliente db = new AddCliente();
+
+        public ClienteController(IAddCliente clientedb)
+        {
+            db = clientedb;
+        }
+
+        public ClienteController(){}
         // GET: Cliente
         public ActionResult Index()
         {
@@ -20,7 +51,7 @@ namespace CRM.Controllers
         {
             
                 if (clienteEsValido(cliente)) {
-                    var insertoCorrectamente = insertClientToDatabase(cliente);
+                    var insertoCorrectamente = db.insertClientToDatabase(cliente);
 
                     if (insertoCorrectamente)
                     {
@@ -37,18 +68,7 @@ namespace CRM.Controllers
             
         }
 
-        public Boolean insertClientToDatabase(Cliente cliente) {
-            CRMEntities1 db = new CRMEntities1();
-            var insert = db.Clientes.Add(cliente);
-            db.SaveChanges();
-            if (insert != null) { 
-            return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        
 
 
         public Boolean clienteEsValido(Cliente pCliente)

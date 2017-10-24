@@ -36,7 +36,7 @@ namespace TestCases
 
         [Category("Login")]
         [TestCase("arielmmonestel", "ariel123", true)]
-        [TestCase("usuarioInexistente", "ariel123", true)]
+        [TestCase("usuarioInexistente", "ariel123", false)]
         [TestCase("arielmmonestel", "ariel12", false)]
         public void userIsValid_validUser_ReturnTrue(string pusername, string ppass, bool expected) {
             LoginController logController = new LoginController();

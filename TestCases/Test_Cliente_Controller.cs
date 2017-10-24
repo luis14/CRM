@@ -20,7 +20,7 @@ namespace TestCases
         [TestCase("alonso.mail.com", "Alonso", "Costa Rica", "88888888", "Persona", "El correo no es válido")]
         public void addCliente_ClienteValidation_ReturnErrorMessage(string correo, string nombre, string pais, string telefono, string tipo, string Expected)
         {
-            var stub_ClienteController = Substitute.For<ClienteController>();
+            ClienteController stub_ClienteController = new ClienteController();
             Cliente cliente = new Cliente { correo = correo, nombre = nombre, pais = pais, telefono = telefono, tipoCliente = tipo };
             //stub_ClienteController.insertClientToDatabase(cliente).Returns(true);
             stub_ClienteController.addCliente(cliente);
@@ -28,14 +28,14 @@ namespace TestCases
         }
 
         [Category("Registro Persona")]
-        [Ignore("Inserta en la base de datos")]
         [TestCase("alonso@mail.com", "Alonso", "Costa Rica", "88888888", "Persona", null)]
         public void registerCliente_ClienteValidation_ReturnNull(string correo, string nombre, string pais, string telefono, string tipo, string Expected)
         {
-            var stub_ClienteController = Substitute.For<ClienteController>();
+            var stub_AddCliente = Substitute.For<IAddCliente>();
+            ClienteController controller = new ClienteController(stub_AddCliente);
             Cliente cliente = new Cliente { correo = correo, nombre = nombre, pais = pais, telefono = telefono, tipoCliente = tipo };
-            stub_ClienteController.insertClientToDatabase(cliente).Returns(true);
-            stub_ClienteController.addCliente(cliente);
+            stub_AddCliente.insertClientToDatabase(cliente).Returns(true);
+            controller.addCliente(cliente);
             Assert.AreEqual(cliente.errorMsj, Expected);
         }
     }

@@ -8,3 +8,4 @@ CRM/bin/CRM.dll
 *.suo
 *.pdb
 *.dll
+*.suo
