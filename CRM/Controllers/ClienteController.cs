@@ -17,17 +17,24 @@ namespace CRM.Controllers
     {
         public Boolean insertClientToDatabase(Cliente cliente)
         {
-            CRMEntities1 db = new CRMEntities1();
-            var insert = db.Clientes.Add(cliente);
-            db.SaveChanges();
-            if (insert != null)
-            {
-                return true;
+            try { 
+                CRMEntities1 db = new CRMEntities1();
+                var insert = db.Clientes.Add(cliente);
+                db.SaveChanges();
+                if (insert != null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
+            catch(Exception ex)
             {
                 return false;
             }
+           
         }
     }
 
@@ -75,42 +82,34 @@ namespace CRM.Controllers
         {
             CRMEntities1 db = new CRMEntities1();
             bool clienteEsValido = true;
-            if(pCliente.correo == null || pCliente.nombre == null || pCliente.pais == null || pCliente.telefono == null || pCliente.tipoCliente == null) {
-                clienteEsValido = false;
-                pCliente.errorMsj = ("Debe llenar todos los campos solicitados.");
+            try { 
+                
+                if(pCliente.correo == null || pCliente.nombre == null || pCliente.pais == null || pCliente.telefono == null || pCliente.tipoCliente == null) {
+                    clienteEsValido = false;
+                    pCliente.errorMsj = ("Debe llenar todos los campos solicitados.");
+                }
+                else if (!Register.isValidEmail(pCliente.correo))
+                {
+                    clienteEsValido = false;
+                    pCliente.errorMsj = "El correo no es válido";
+                }
+                var clientDetails = db.Clientes.Where(x => x.correo == pCliente.correo || x.nombre == pCliente.nombre).FirstOrDefault();
+                if (clientDetails != null)
+                {
+                    clienteEsValido = false;
+                    pCliente.errorMsj = ("El cliente ya fue registado previamente");
+                }
             }
-            var clientDetails = db.Clientes.Where(x => x.correo == pCliente.correo || x.nombre == pCliente.nombre).FirstOrDefault();
-            if (clientDetails != null)
+            catch (Exception ex)
             {
                 clienteEsValido = false;
                 pCliente.errorMsj = ("El cliente ya fue registado previamente");
             }
-            if (!isValidEmail(pCliente.correo))
-            {
-                clienteEsValido = false;
-                pCliente.errorMsj = "El correo no es válido";
-            }
+
+
             return clienteEsValido;
         }
 
-        public static bool isValidEmail(string emailaddress)
-        {   if(emailaddress != null) { 
-                    try
-                    {
-                        MailAddress m = new MailAddress(emailaddress);
-
-                        return true;
-                    }
-            
-                catch (FormatException)
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
-        }
+        
     }
 }

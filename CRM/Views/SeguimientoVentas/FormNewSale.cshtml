@@ -1,12 +1,12 @@
 ﻿    @model CRM.Models.Venta
     @{
-        Layout = null;
-        SelectList selectEmpleados = new SelectList(@ViewBag.listaEmpleados,"Value","Text");
-        SelectList selectClientes = new SelectList(@ViewBag.listaClientes, "Value", "Text");
-        SelectList selectProductos = new SelectList(@ViewBag.listaProductos, "Value", "Text");
+            Layout = null;
+            SelectList selectEmpleados = new SelectList(@ViewBag.listaEmpleados,"Value","Text");
+            SelectList selectClientes = new SelectList(@ViewBag.listaClientes, "Value", "Text");
+            SelectList selectProductos = new SelectList(@ViewBag.listaProductos, "Value", "Text");
+       
     }
-    
-    }
+   
 
         <!DOCTYPE html>
         <html lang="en">
@@ -141,13 +141,13 @@
                                                     <div class="form-group">
                                                         <label>Nombre del cliente</label>
 
-                                                        @Html.DropDownListFor(model => model.cliente_id, selectClientes, "-- Seleccione un cliente --", new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.cliente_id, selectClientes, new { @class = "form-control" })
 
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Nombre del vendedor</label>
 
-                                                        @Html.DropDownListFor(model => model.fvendedor_id, selectEmpleados, "-- Seleccione un empleado --", new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.fvendedor_id, selectEmpleados, new { @class = "form-control" })
 
                                                     </div>
                                                     <div class="form-group">
@@ -160,13 +160,13 @@
                                                         <div class="col-lg-6">
                                                             <div class="form-group">
                                                                 <label>Agregar producto(s)</label>
-                                                                @Html.DropDownList("selectProductos", selectProductos, "-- Seleccione un producto --", new { @class = "form-control" })
+                                                                @Html.DropDownList("selectProductos", selectProductos, new { @class = "form-control" })
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-6">
                                                             <div class="form-group">
                                                                 <label>Cantidad</label>
-                                                                <input class="form-control" id="cantidadProductos" name="cantidadProductos" type="number" min="0" />
+                                                                <input class="form-control" id="cantidadProductos" name="cantidadProductos" type="number" min="1" />
                                                                 <input type="button" class="btn-success btn-xs pull-right" value="Agregar" id="btnAgregar" />
 
                                                             </div>
@@ -189,6 +189,12 @@
                                                                 @Html.EditorFor(model => model.comision, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @max = "100" } })
 
                                                             </div>
+                                                        </div>
+                                                        <div class="form-group">
+
+                                                            <label>Porcentaje de comisión</label>
+                                                            @Html.LabelFor(model => model.errorMsj, new { htmlAttributes = new { @class = "form-control" } })
+
                                                         </div>
                                                     </div>
 

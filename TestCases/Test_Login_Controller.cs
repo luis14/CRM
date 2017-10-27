@@ -12,17 +12,7 @@ using System.Data.Entity;
 
 namespace TestCases
 {
-    public static class Extensions
-    {
-        public static IDbSet<T> Initialize<T>(this IDbSet<T> dbSet, IQueryable<T> data) where T : class
-        {
-            dbSet.Provider.Returns(data.Provider);
-            dbSet.Expression.Returns(data.Expression);
-            dbSet.ElementType.Returns(data.ElementType);
-            dbSet.GetEnumerator().Returns(data.GetEnumerator());
-            return dbSet;
-        }
-    }
+    
 
     [TestFixture]
     class TestLogin
@@ -57,6 +47,32 @@ namespace TestCases
             Assert.AreEqual(usuario.errorMessage,expected);
         }
 
+        [Category("Registro")]
+        [TestCase("PSJ2001azb",true)]
+        [TestCase("Rapzod", false)]
+        [TestCase("", false)]
+        public void passwordIsValid_ValidPassword_ReturnBool(String password, Boolean expected)
+        {
+            
+            Boolean esValido = Register.passwordIsValid(password);
+            Assert.AreEqual(esValido,expected);
+        }
+
+        [Category("Registro")]
+        [TestCase("arielmmonestel@gmail.com", true)]
+        [TestCase("franciscoferfoja.es", false)]
+        [TestCase("", false)]
+        [TestCase("a@b.com", true)]
+        [TestCase("@gmail.com", false)]
+        [TestCase("juanito@hotmail", false)]
+
+        public void emailIsValid_ValidEmail_ReturnBool(String email, Boolean expected)
+        {
+
+            Boolean esValido = Register.isValidEmail(email);
+            Assert.AreEqual(esValido, expected);
+        }
+
 
         [Category("Registro")]
         // correo repetido *(Revisa Uppercase tambien)
@@ -66,9 +82,9 @@ namespace TestCases
         // contrasenas diferentes
         [TestCase("luisralfaro1", "Contrasena1", "Contrasena2", "luis124534@mail.com", "Las contrasenas no concuerdan")]
         // sin mayuscula
-        [TestCase("luisralfaro", "luisito123", "luisito123", "luis1dd234@mail.com", "La contrasena debe tener al menos 7 caracteres y  1 Uppercase")]
+        [TestCase("luisralfaro2", "luisito123", "luisito123", "luis1dd234@mail.com", "La contrasena debe tener al menos 7 caracteres y  1 Uppercase")]
         //Largo de contrasena
-        [TestCase("luisralfaro", "lui123", "lui123", "luis12ff34@mail.com", "La contrasena debe tener al menos 7 caracteres y  1 Uppercase")] 
+        [TestCase("luisralfaro4", "lui123", "lui123", "luis12ff34@mail.com", "La contrasena debe tener al menos 7 caracteres y  1 Uppercase")] 
         public void registerUser_UserValidation_returnErrorMessage(String username, String pass, String repeatPass, String email, string msjExpected)
         {
            // var fakeRegister = Substitute.For<Register>();

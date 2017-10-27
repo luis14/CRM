@@ -27,7 +27,7 @@ namespace CRM.Models
         public Nullable<int> fvendedor_id { get; set; }
         public Nullable<int> cliente_id { get; set; }
         public string productolista { get; set; }
-
+        public string errorMsj { get; set; }
         public virtual Vendedore Vendedore { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Ventas_x_Productos> Ventas_x_Productos { get; set; }

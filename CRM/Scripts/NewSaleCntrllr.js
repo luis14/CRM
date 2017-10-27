@@ -23,20 +23,27 @@ $('#btnAgregar').click(function () {
     var costoProducto;
     var costoTotal;
     var valHidden = $('#productolista').val();
-    if (valHidden.length == 0) {
-        $('#productolista').val(idProducto+"-"+cantidad);
+    if (idProducto.length == 0) {
+        alert("Debe seleccionar un producto");
     }
-    else {
-        $('#productolista').val(valHidden + ";" + idProducto + "-" + cantidad);
+    else if (cantidad.length == 0) {
+        alert("Debe seleccionar la cantidad de productos");
     }
-    alert($('#productolista').val());
-    for (var i = 0; i < productos.length; i++) {
-        if (productos[i].producto_id == idProducto) {
-            costoProducto = productos[i].precio;
-            costoTotal = parseInt(costoProducto) * parseInt(cantidad);
+    else{
+        if (valHidden.length == 0) {
+            $('#productolista').val(idProducto+"-"+cantidad);
+        }
+        else {
+            $('#productolista').val(valHidden + ";" + idProducto + "-" + cantidad);
+        }
+        for (var i = 0; i < productos.length; i++) {
+            if (productos[i].producto_id == idProducto) {
+                costoProducto = productos[i].precio;
+                costoTotal = parseInt(costoProducto) * parseInt(cantidad);
 
-            $('#tablaProductos').append('<tr><td>' + productos[i].nombre + '</td><td>' + costoProducto + '</td><td>' + cantidad + '</td><td>' + costoTotal + '</td></tr>');
+                $('#tablaProductos').append('<tr><td>' + productos[i].nombre + '</td><td>' + costoProducto + '</td><td>' + cantidad + '</td><td>' + costoTotal + '</td></tr>');
 
+            }
         }
     }
 });

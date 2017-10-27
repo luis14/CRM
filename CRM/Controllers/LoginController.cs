@@ -1,7 +1,9 @@
 ﻿using CRM.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 
@@ -18,12 +20,7 @@ namespace CRM.Controllers
         {
             db = p_db;
         }
-        /*
-        public LoginController(Register preg) {
-            registerObject = preg;
-        }*/
         public LoginController() {
-            //registerObject = new Register();
         }
         public ActionResult Index()
         {
@@ -113,6 +110,27 @@ namespace CRM.Controllers
 
 
         }
+        public static bool isValidEmail(string emailaddress)
+        {
+            if (emailaddress != null)
+            {
+                try
+                {
+                    var emailAddress =  new EmailAddressAttribute();
+                    return emailAddress.IsValid(emailaddress);
+                     
+                }
+
+                catch (FormatException)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
         public static Boolean validateUser(User pUser) {
             Boolean userIsValid = true;
             try {
@@ -123,6 +141,17 @@ namespace CRM.Controllers
                 else if (!pUser.pass.Equals(pUser.repeatPass)) {
                     userIsValid = false;
                     pUser.errorMessage = "Las contrasenas no concuerdan";
+                }
+                else if (!passwordIsValid(pUser.pass))
+                {
+                    userIsValid = false;
+                    pUser.errorMessage = "La contrasena debe tener al menos 7 caracteres y  1 Uppercase";
+                }
+
+                else if (!Register.isValidEmail(pUser.email))
+                {
+                    userIsValid = false;
+                    pUser.errorMessage = "El correo no es válido";
                 }
                 ICRMEntities db = new CRMEntities();
                 var userDetails = db.Users.Where(x => x.username == pUser.username).FirstOrDefault();
@@ -141,15 +170,7 @@ namespace CRM.Controllers
                     userIsValid = false;
                     pUser.errorMessage = "El email ya existe";
                 }
-                else if (!passwordIsValid(pUser.pass)) {
-                    userIsValid = false;
-                    pUser.errorMessage = "La contrasena debe tener al menos 7 caracteres y  1 Uppercase";
-                }
-
-                else if (!ClienteController.isValidEmail(pUser.email)) {
-                    userIsValid = false;
-                    pUser.errorMessage = "El correo no es válido";
-                }
+               
             }
             catch (Exception)
             {
@@ -171,11 +192,16 @@ namespace CRM.Controllers
     {
         public Boolean insertUserIntoDatabase(User user) {
             Boolean insertoCorrectamente = false;
-            CRMEntities db = new CRMEntities();
-            var userInserted = db.Users.Add(user);
-            db.SaveChanges();
-            if(userInserted != null) {
-                insertoCorrectamente = true;
+            try { 
+                CRMEntities db = new CRMEntities();
+                var userInserted = db.Users.Add(user);
+                db.SaveChanges();
+                if(userInserted != null) {
+                    insertoCorrectamente = true;
+                }
+            }catch(Exception ex)
+            {
+                insertoCorrectamente = false;
             }
 
             return insertoCorrectamente;
