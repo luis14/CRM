@@ -10,16 +10,15 @@
 namespace CRM.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class User
+    public partial class getPropuestas1_Result
     {
-        public string errorMessage;
-        public string repeatPass;
-
-        public int ID { get; set; }
-        public string username { get; set; }
-        public string pass { get; set; }
-        public string email { get; set; }
+        public Nullable<System.DateTime> fecha { get; set; }
+        public int venta_id { get; set; }
+        public Nullable<int> descuento { get; set; }
+        public Nullable<int> comision { get; set; }
+        public string nombreVendedor { get; set; }
+        public string nombreCliente { get; set; }
+        public Nullable<int> totalVenta { get; set; }
     }
 }

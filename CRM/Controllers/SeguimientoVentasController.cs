@@ -49,6 +49,14 @@ namespace CRM.Controllers
 
         public ActionResult FormNewSale()
         {
+            ViewBag.listaEmpleados = getListaEmpleados();
+            ViewBag.listaClientes = getListaClientes();
+            ViewBag.listaProductos = getListaProductos();
+            return View();
+        }
+
+        public List<SelectListItem> getListaEmpleados()
+        {
             var empleados = new CRMEntities3();
             var getEmpleados = empleados.Vendedores.ToList();
             var items = new List<SelectListItem>();
@@ -57,40 +65,49 @@ namespace CRM.Controllers
 
                 items.Add(new SelectListItem { Text = getEmpleados.ElementAt(i).nombre.ToString(), Value = getEmpleados.ElementAt(i).vendedor_id.ToString() });
             }
-            ViewBag.listaEmpleados = items;
+            return items;
+        }
 
+        public List<SelectListItem> getListaClientes()
+        {
+            var empleados = new CRMEntities3();
             var getClientes = empleados.Clientes.ToList();
-            items = new List<SelectListItem>();
+            var items = new List<SelectListItem>();
             for (var i = 0; i < getClientes.Count(); i++)
             {
 
                 items.Add(new SelectListItem { Text = getClientes.ElementAt(i).nombre.ToString(), Value = getClientes.ElementAt(i).cliente_id.ToString() });
             }
-            ViewBag.listaClientes = items;
+            return items;
+        }
 
-
+        public List<SelectListItem> getListaProductos()
+        {
+            var  empleados = new CRMEntities3();
             var getProductos = empleados.Productos.ToList();
-            items = new List<SelectListItem>();
+            var items = new List<SelectListItem>();
             for (var i = 0; i < getProductos.Count(); i++)
             {
 
                 items.Add(new SelectListItem { Text = getProductos.ElementAt(i).nombre.ToString(), Value = getProductos.ElementAt(i).producto_id.ToString() });
             }
-            ViewBag.listaProductos = items;
-            return View();
+            return items;
         }
 
         [HttpPost]
         public ActionResult addVenta(CRM.Models.Venta venta)
         {
-            AddVenta ventaDB = new AddVenta();
+            AgregarVenta ventaDB = new AgregarVenta();
             Boolean insertoBien =  false;
-            insertoBien = ventaDB.InsertVenta(venta);
+            insertoBien = ventaDB.InsertarVenta(venta);
             if (insertoBien) { 
                 return RedirectToAction("Index", "SeguimientoVentas");
             }
             else
             {
+            ViewBag.listaEmpleados = getListaEmpleados();
+            ViewBag.listaClientes = getListaClientes();
+            ViewBag.listaProductos = getListaProductos();
                 return View("FormNewSale", venta);
             }
         }
@@ -119,12 +136,12 @@ namespace CRM.Controllers
         }
     }
 
-    public class AddVenta
+    public class AgregarVenta
     {
         IVentaDB ventaDB = new VentaDB();
 
-        public AddVenta() { }
-        public AddVenta(IVentaDB pVentaDB)
+        public AgregarVenta() { }
+        public AgregarVenta(IVentaDB pVentaDB)
         {
             ventaDB = pVentaDB;
         }
@@ -132,7 +149,7 @@ namespace CRM.Controllers
         {
             Boolean ventaEsValida = true;
 
-            if (pVenta.cliente_id == null || pVenta.comision == null || pVenta.descuento == null || pVenta.fecha == null || pVenta.fvendedor_id == null || pVenta.productolista == null)
+            if ((pVenta.cliente_id == null) || (pVenta.comision == null) || (pVenta.descuento == null) || (pVenta.fecha == null) || (pVenta.fvendedor_id == null) || (pVenta.productolista == null))
             {
                 ventaEsValida = false;
                 pVenta.errorMsj = "Debe llenar todos campos";
@@ -148,7 +165,7 @@ namespace CRM.Controllers
                 ventaEsValida = false;
                 pVenta.errorMsj = "El porcentaje de comision debe ser un valor entre 0 y 100";
             }
-            else if (!dateIsCorrect(pVenta.fecha.ToString()))
+            else if (!fechaEsCorrecta(pVenta.fecha.ToString()))
             {
                 ventaEsValida = false;
                 pVenta.errorMsj = "La fecha no es correcta";
@@ -159,7 +176,7 @@ namespace CRM.Controllers
 
         }
 
-        public static bool dateIsCorrect(String date)
+        public static bool fechaEsCorrecta(String date)
         {
             try
             {
@@ -171,13 +188,13 @@ namespace CRM.Controllers
                 return false;
             }
         }
-        public Boolean InsertVenta(Venta pVenta)
+        public Boolean InsertarVenta(Venta pVenta)
         {
             Boolean insertoVenta = false;
 
             if (validateVenta(pVenta))
             {
-                int ventaId =  ventaDB.addVentaToDatabase(pVenta);
+                int ventaId =  ventaDB.agregarVentaToDatabase(pVenta);
                 pVenta.Ventas_x_Productos = null;
                 var producCantidad = pVenta.productolista;
                 var listaProductosyCantidad = producCantidad.Split(';');
@@ -186,7 +203,7 @@ namespace CRM.Controllers
                     var elementos = listaProductosyCantidad.ElementAt(i).Split('-');
                     var producto = int.Parse(elementos.ElementAt(0));
                     var cantidad = int.Parse(elementos.ElementAt(1));
-                    Boolean insertoProducto = InsertVentaXProducto(ventaId, producto, cantidad);
+                    Boolean insertoProducto = InsertarVentaXProducto(ventaId, producto, cantidad);
                 }
 
                 if(ventaId > 0)
@@ -197,23 +214,23 @@ namespace CRM.Controllers
             return insertoVenta;
 
         }
-        public Boolean InsertVentaXProducto(int pVentaId, int pProductoID, int pCantidad)
+        public Boolean InsertarVentaXProducto(int pVentaId, int pProductoID, int pCantidad)
         {
-            Boolean insertoCorrectamente = ventaDB.addVentaXProductoToDatabase(pVentaId, pProductoID, pCantidad);
+            Boolean insertoCorrectamente = ventaDB.agregarVentaXProductoToDatabase(pVentaId, pProductoID, pCantidad);
             return insertoCorrectamente;
         }
     }
         public interface IVentaDB
         {
-            int addVentaToDatabase(Venta pVenta);
-            bool addVentaXProductoToDatabase(int pVentaId, int pProductoID, int pCantidad);
+            int agregarVentaToDatabase(Venta pVenta);
+            bool agregarVentaXProductoToDatabase(int pVentaId, int pProductoID, int pCantidad);
 
         }
         public class VentaDB : IVentaDB
         {
 
 
-            public bool addVentaXProductoToDatabase(int pVentaId, int pProductoID, int pCantidad)
+            public bool agregarVentaXProductoToDatabase(int pVentaId, int pProductoID, int pCantidad)
             {
 
                 Ventas_x_Productos ventaProducto = new Ventas_x_Productos();
@@ -237,7 +254,7 @@ namespace CRM.Controllers
             }
 
 
-            public int addVentaToDatabase(Venta pVenta)
+            public int agregarVentaToDatabase(Venta pVenta)
             {
                 int ventaId = -1;
                 using (CRMEntities3 db = new CRMEntities3())

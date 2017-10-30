@@ -1,65 +1,6 @@
-﻿@model CRM.Models.Cliente
+﻿@model CRM.Models.Venta
 @{
     Layout = null;
-    List<SelectListItem> listPaises = new List<SelectListItem>();
-    listPaises.Add(new SelectListItem
-    {
-        Text = "Costa Rica",
-        Value = "Costa Rica"
-    });
-    listPaises.Add(new SelectListItem
-    {
-        Text = "El Salvador",
-        Value = "El Salvador"
-    });
-    listPaises.Add(new SelectListItem
-    {
-        Text = "Honduras",
-        Value = "Honduras"
-    });
-    listPaises.Add(new SelectListItem
-    {
-        Text = "Guatemala",
-        Value = "Guatemala"
-    });
-    listPaises.Add(new SelectListItem
-    {
-        Text = "Belice",
-        Value = "Belice"
-    });
-    listPaises.Add(new SelectListItem
-    {
-        Text = "Nicaragua",
-        Value = "Nicaragua"
-    });
-    listPaises.Add(new SelectListItem
-    {
-        Text = "Mexico",
-        Value = "Mexico"
-    });
-    listPaises.Add(new SelectListItem
-    {
-        Text = "Panama",
-        Value = "Panama"
-    });
-    listPaises.Add(new SelectListItem
-    {
-        Text = "Colombia",
-        Value = "Colombia"
-    });
-
-    List<SelectListItem> listTipoCliente = new List<SelectListItem>();
-    listTipoCliente.Add(new SelectListItem
-    {
-        Text = "Persona",
-        Value = "Persona"
-    });
-    listTipoCliente.Add(new SelectListItem
-    {
-        Text = "Empresa",
-        Value = "Empresa"
-    });
-
 }
 
 <!DOCTYPE html>
@@ -77,9 +18,14 @@
 
     <!-- Bootstrap Core CSS -->
     <link href="~/bootstrap.min.css" rel="stylesheet" />
-
     <!-- MetisMenu CSS -->
     <link href="~/metisMenu.min.css" rel="stylesheet" />
+
+    <!-- DataTables CSS -->
+    <link href="~/dataTables.bootstrap.css" rel="stylesheet" />
+
+    <!-- DataTables Responsive CSS -->
+    <link href="~/dataTables.responsive.css" rel="stylesheet" />
 
     <!-- Custom CSS -->
     <link href="~/sb-admin-2.css" rel="stylesheet" />
@@ -100,7 +46,6 @@
 
     <div id="wrapper">
 
-        <!-- Navigation -->
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
@@ -174,69 +119,60 @@
             <!-- /.navbar-static-side -->
         </nav>
 
-
-        <div id="page-wrapper">
+ <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Registro de nuevo cliente</h1>
+                    <h1 class="page-header">Propuestas</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
             <div class="row">
+                <div class="field-wrap">
+                    <label>
+                        @Html.DisplayFor(model => model.errorMsj)
+                    </label>
+
+                </div>
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            Nuevo cliente
+                            Seguimiento de las propuestas
                         </div>
+                        <!-- /.panel-heading -->
                         <div class="panel-body">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    @using (Html.BeginForm("addCliente","Cliente",FormMethod.Post))
+                            <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Vendedor</th>
+                                        <th>Cliente</th>
+                                        <th>Comisión</th>
+                                        <th>Descuento</th>
+                                        <th>Venta total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var venta in ViewBag.propuestas)
                                     {
-                                        <div class="form-group">
-                                            <label>Tipo de cliente</label> 
-
-                                            @Html.DropDownListFor(model => model.tipoCliente, listTipoCliente, "-- Seleccione un tipo --", new { @class = "form-control"})
-                                            
-                                        </div>
-                                        <div class="form-group">
-                                            
-                                           <label>Nombre</label>
-                                           @Html.EditorFor(model => model.nombre, new { htmlAttributes = new { @class = "form-control" } })
-                                            
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Pais</label>
-                                            @Html.DropDownListFor(model => model.pais, listPaises, "-- Selecione un pais --", new { @class = "form-control" })
-                                            
-                                        </div>
-                                        <div class="form-group">
-
-                                            <label>Correo</label>
-                                            @Html.EditorFor(model => model.correo, new { htmlAttributes = new { @class = "form-control" } })
-
-                                        </div>
-                                        <div class="form-group">
-
-                                            <label>Telefono</label>
-                                            @Html.EditorFor(model => model.telefono, new { htmlAttributes = new { @class = "form-control" } })
-
-
-                                        </div>
-
-                                        <div class="field-wrap">
-                                            <label>
-                                                @Html.DisplayFor(model => model.errorMsj)
-                                            </label>
-
-                                        </div>
-
-                                            <input type="submit" class="btn btn-default" value="Agregar cliente"></input>
+                                        <tr class="@venta.nombreVendedor">
+                                            <form action="/MisPropuestas/updatePropuesta" method="post">
+                                                <input type="hidden" name="venta_id" value="@venta.venta_id" />
+                                                <td>@venta.fecha</td>
+                                                <td>@venta.nombreVendedor</td>
+                                                <td>@venta.nombreCliente</td>
+                                                <td class="center"><input type="number" name="comision" value="@venta.comision" min="0" max="100" /></td>
+                                                <td class="center"><input type="number" name="descuento" value="@venta.descuento" min="0" max="100" /></td>
+                                                <td class="center">@venta.totalVenta</td>
+                                                <td class="center"><input type="submit" class="btn-success btn-xs pull-right" value="Confirmar Venta"/></td>
+                                            </form>
+                                        </tr>
                                     }
-                                </div>
-                            </div>
-                            <!-- /.row (nested) -->
+
+                                </tbody>
+                            </table>
+                            <!-- /.table-responsive -->
+
                         </div>
                         <!-- /.panel-body -->
                     </div>
@@ -244,7 +180,6 @@
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
-            <!-- /.row -->
         </div>
         <!-- /#page-wrapper -->
 
@@ -252,16 +187,28 @@
     <!-- /#wrapper -->
     <!-- jQuery -->
     <script src="~/Scripts/jquery.min.js"></script>
-
     <!-- Bootstrap Core JavaScript -->
     <script src="~/Scripts/bootstrap.min.js"></script>
-
     <!-- Metis Menu Plugin JavaScript -->
     <script src="~/Scripts/metisMenu.min.js"></script>
+    <!-- DataTables JavaScript -->
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/dataTables.responsive.js"></script>
 
     <!-- Custom Theme JavaScript -->
     <script src="~/Scripts/sb-admin-2.js"></script>
 
+    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+    <script>
+    $(document).ready(function() {
+        $('#dataTables-example').DataTable({
+            responsive: true
+        });
+    });
+    </script>
+
 </body>
 
 </html>
+

@@ -22,20 +22,21 @@ namespace TestCases
         {
             ClienteController stub_ClienteController = new ClienteController();
             Cliente cliente = new Cliente { correo = correo, nombre = nombre, pais = pais, telefono = telefono, tipoCliente = tipo };
-            //stub_ClienteController.insertClientToDatabase(cliente).Returns(true);
-            stub_ClienteController.addCliente(cliente);
+            //stub_ClienteController.InsertarClienteEnBD(cliente).Returns(true);
+            stub_ClienteController.agregarCliente(cliente);
             Assert.AreEqual(cliente.errorMsj, Expected);
         }
 
-        [Category("Registro Persona")]
+        [TestCase("info@marvelmagazine.com", "Marvel CO", "Costa Rica", "00157484638474", "Empresa", null)]
+        [TestCase("mariaRamos@mail.com", "Maria", "Costa Rica", "50694736284", "Persona", null)]
         [TestCase("alonso@mail.com", "Alonso", "Costa Rica", "88888888", "Persona", null)]
         public void registerCliente_ClienteValidation_ReturnNull(string correo, string nombre, string pais, string telefono, string tipo, string Expected)
         {
-            var stub_AddCliente = Substitute.For<IAddCliente>();
+            var stub_AddCliente = Substitute.For<IClienteBD>();
             ClienteController controller = new ClienteController(stub_AddCliente);
             Cliente cliente = new Cliente { correo = correo, nombre = nombre, pais = pais, telefono = telefono, tipoCliente = tipo };
-            stub_AddCliente.insertClientToDatabase(cliente).Returns(true);
-            controller.addCliente(cliente);
+            stub_AddCliente.InsertarClienteEnBD(cliente).Returns(true);
+            controller.agregarCliente(cliente);
             Assert.AreEqual(cliente.errorMsj, Expected);
         }
     }

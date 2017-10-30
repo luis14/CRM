@@ -38,5 +38,12 @@ namespace CRM.Models
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<getVentas_Result>("getVentas");
         }
+    
+
+    
+        public virtual ObjectResult<getPropuestas2_Result> getPropuestas2()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<getPropuestas2_Result>("getPropuestas2");
+        }
     }
 }

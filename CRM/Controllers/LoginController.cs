@@ -27,7 +27,7 @@ namespace CRM.Controllers
             return View();
         }
 
-        public Boolean userIsValid(CRM.Models.User usuarioNoIdentificado) {
+        public Boolean usuarioEsValido(CRM.Models.User usuarioNoIdentificado) {
 
             bool esValido = false;
 
@@ -41,7 +41,7 @@ namespace CRM.Controllers
             return esValido;
         }
         [HttpPost]
-        public ActionResult Autherize(CRM.Models.User userModel)
+        public ActionResult autorizarUsuario(CRM.Models.User userModel)
         {
             if (userModel.username == null || userModel.pass == null)
             {
@@ -49,7 +49,7 @@ namespace CRM.Controllers
                 return View("Index", userModel);
             }
             else {
-                if (userIsValid(userModel)) {
+                if (usuarioEsValido(userModel)) {
                     string username = userModel.username;
                     Session["username"] = username;
                     ViewBag.username = Session["username"];
@@ -67,50 +67,56 @@ namespace CRM.Controllers
         [HttpPost]
         public ActionResult register(CRM.Models.User userModel)
         {    
-           Register registerObject = new Register();
-           registerObject.RegisterUser(userModel);
+           InsertarUsuario registerObject = new InsertarUsuario();
+           registerObject.RegistrarUsuario(userModel);
            return View("Index", userModel);
         }
 
 
     }
 
-    public class Register {
+    public class InsertarUsuario {
 
-        IAddUserToDabase database = new AddUserToDatabase();
+        IRegistroBD database = new AddUserToDatabase();
 
-        public Register(IAddUserToDabase pdatabase) {
+        public InsertarUsuario(IRegistroBD pdatabase) {
             database = pdatabase;
         }
-        public Register() { }
+        public InsertarUsuario() { }
 
-        public void RegisterUser(User pUser)
+        public void RegistrarUsuario(User pUser)
         {
-            if (Register.validateUser(pUser))
+            if (InsertarUsuario.validarRegistro(pUser))
             {
-               database.insertUserIntoDatabase(pUser);
+               database.insertarRegistroEnBD(pUser);
             
             }
 
         }
-        public static Boolean passwordIsValid(String newPass)
+        public static Boolean contrasenaEsValida(String newPass)
         {
-            if
-                (
-                    newPass.Length > 6 &&        //if length is >= 6
-                    newPass.Any(char.IsUpper) //if any character is upper case
-                )
-            {
+            try {
+                if
+                    (
+                        newPass.Length > 6 &&        //if length is >= 6
+                        newPass.Any(char.IsUpper) //if any character is upper case
+                    )
+                {
 
-                return true;
-            }
+                    return true;
+                }
+            
             else {
+                return false;
+                }
+            }catch(Exception e)
+            {
                 return false;
             }
 
 
         }
-        public static bool isValidEmail(string emailaddress)
+        public static bool EmailEsValido(string emailaddress)
         {
             if (emailaddress != null)
             {
@@ -131,7 +137,7 @@ namespace CRM.Controllers
                 return false;
             }
         }
-        public static Boolean validateUser(User pUser) {
+        public static Boolean validarRegistro(User pUser) {
             Boolean userIsValid = true;
             try {
                 if (pUser.email == null || pUser.username == null || pUser.pass == null || pUser.repeatPass == null) {
@@ -142,13 +148,13 @@ namespace CRM.Controllers
                     userIsValid = false;
                     pUser.errorMessage = "Las contrasenas no concuerdan";
                 }
-                else if (!passwordIsValid(pUser.pass))
+                else if (!contrasenaEsValida(pUser.pass))
                 {
                     userIsValid = false;
                     pUser.errorMessage = "La contrasena debe tener al menos 7 caracteres y  1 Uppercase";
                 }
 
-                else if (!Register.isValidEmail(pUser.email))
+                else if (!InsertarUsuario.EmailEsValido(pUser.email))
                 {
                     userIsValid = false;
                     pUser.errorMessage = "El correo no es válido";
@@ -184,13 +190,13 @@ namespace CRM.Controllers
 
 
     }
-    public interface IAddUserToDabase{
-        Boolean insertUserIntoDatabase(User user);
+    public interface IRegistroBD{
+        Boolean insertarRegistroEnBD(User user);
     }
 
-    public class AddUserToDatabase:IAddUserToDabase
+    public class AddUserToDatabase:IRegistroBD
     {
-        public Boolean insertUserIntoDatabase(User user) {
+        public Boolean insertarRegistroEnBD(User user) {
             Boolean insertoCorrectamente = false;
             try { 
                 CRMEntities db = new CRMEntities();

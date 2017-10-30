@@ -8,14 +8,14 @@ using System.Web.Mvc;
 
 namespace CRM.Controllers
 {
-    public interface IAddCliente
+    public interface IClienteBD
     {
-        Boolean insertClientToDatabase(CRM.Models.Cliente clienteNoRegistrado);
+        Boolean InsertarClienteEnBD(CRM.Models.Cliente clienteNoRegistrado);
     }
 
-    public class AddCliente : IAddCliente
+    public class AddCliente : IClienteBD
     {
-        public Boolean insertClientToDatabase(Cliente cliente)
+        public Boolean InsertarClienteEnBD(Cliente cliente)
         {
             try { 
                 CRMEntities1 db = new CRMEntities1();
@@ -40,9 +40,9 @@ namespace CRM.Controllers
 
     public class ClienteController : Controller
     {
-        IAddCliente db = new AddCliente();
+        IClienteBD db = new AddCliente();
 
-        public ClienteController(IAddCliente clientedb)
+        public ClienteController(IClienteBD clientedb)
         {
             db = clientedb;
         }
@@ -54,11 +54,11 @@ namespace CRM.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult addCliente(CRM.Models.Cliente cliente)
+        public ActionResult agregarCliente(CRM.Models.Cliente cliente)
         {
             
                 if (clienteEsValido(cliente)) {
-                    var insertoCorrectamente = db.insertClientToDatabase(cliente);
+                    var insertoCorrectamente = db.InsertarClienteEnBD(cliente);
 
                     if (insertoCorrectamente)
                     {
@@ -88,7 +88,7 @@ namespace CRM.Controllers
                     clienteEsValido = false;
                     pCliente.errorMsj = ("Debe llenar todos los campos solicitados.");
                 }
-                else if (!Register.isValidEmail(pCliente.correo))
+                else if (!InsertarUsuario.EmailEsValido(pCliente.correo))
                 {
                     clienteEsValido = false;
                     pCliente.errorMsj = "El correo no es válido";

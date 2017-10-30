@@ -208,6 +208,7 @@
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\MisPropuestasController.cs" />
     <Compile Include="Controllers\SeguimientoVentasController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -230,6 +231,15 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ClientesDataModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\getPropuestas1_Result.cs">
+      <DependentUpon>VentasModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\getPropuestas2_Result.cs">
+      <DependentUpon>VentasModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\getPropuestas_Result.cs">
+      <DependentUpon>VentasModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\getVentas_Result.cs">
       <DependentUpon>VentasModel.tt</DependentUpon>
@@ -426,6 +436,7 @@
     <Content Include="Views\Cliente\Index.cshtml" />
     <Content Include="Views\SeguimientoVentas\Index.cshtml" />
     <Content Include="Views\SeguimientoVentas\FormNewSale.cshtml" />
+    <Content Include="Views\MisPropuestas\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

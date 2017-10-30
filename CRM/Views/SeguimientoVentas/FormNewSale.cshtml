@@ -1,10 +1,23 @@
 ﻿    @model CRM.Models.Venta
+
     @{
-            Layout = null;
-            SelectList selectEmpleados = new SelectList(@ViewBag.listaEmpleados,"Value","Text");
-            SelectList selectClientes = new SelectList(@ViewBag.listaClientes, "Value", "Text");
-            SelectList selectProductos = new SelectList(@ViewBag.listaProductos, "Value", "Text");
-       
+        Layout = null;
+        SelectList selectEmpleados = new SelectList(@ViewBag.listaEmpleados,"Value","Text");
+        SelectList selectClientes = new SelectList(@ViewBag.listaClientes, "Value", "Text");
+        SelectList selectProductos = new SelectList(@ViewBag.listaProductos, "Value", "Text");
+
+        List<SelectListItem> selectTipos = new List<SelectListItem>();
+        selectTipos.Add(new SelectListItem
+        {
+            Text = "Venta",
+            Value = "Venta"
+        });
+        selectTipos.Add(new SelectListItem
+        {
+            Text = "Propuesta de Venta",
+            Value = "Propuesta"
+        });
+
     }
    
 
@@ -107,7 +120,10 @@
                                     <a href="~/SeguimientoVentas/Index"><i class="fa fa-dashboard fa-fw"></i> Seguimiento de Ventas</a>
                                 </li>
                                 <li>
-                                    <a href="~/SeguimientoVentas/FormNewSale"><i class="fa fa-dashboard fa-fw"></i> Seguimiento de Ventas</a>
+                                    <a href="~/SeguimientoVentas/FormNewSale"><i class="fa fa-dashboard fa-fw"></i> Nueva Venta</a>
+                                </li>
+                                <li>
+                                    <a href="~/MisPropuestas/Index"><i class="fa fa-dashboard fa-fw"></i> Mis Propuestas</a>
                                 </li>
 
                             </ul>
@@ -138,6 +154,12 @@
                                             {
 
                                                 <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label>Tipo</label>
+
+                                                        @Html.DropDownListFor(model => model.tipo, selectTipos, new { @class = "form-control" })
+
+                                                    </div>
                                                     <div class="form-group">
                                                         <label>Nombre del cliente</label>
 
@@ -190,10 +212,10 @@
 
                                                             </div>
                                                         </div>
-                                                        <div class="form-group">
-
-                                                            <label>Porcentaje de comisión</label>
-                                                            @Html.LabelFor(model => model.errorMsj, new { htmlAttributes = new { @class = "form-control" } })
+                                                        <div class="field-wrap">
+                                                            <label>
+                                                                @Html.DisplayFor(model => model.errorMsj)
+                                                            </label>
 
                                                         </div>
                                                     </div>

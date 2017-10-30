@@ -41,7 +41,7 @@ namespace TestCases
         }
 
         [TestCase(1,1,5,5,"2017/10/26","1-3;2-4;1-2;3-5", null)]
-        [TestCase(1,1, 5, 5,null, "1-3;2-4;1-2;3-5", "Debe llenar todos campos")]
+        [TestCase(1, 1, 5,null, "2017/10/26", "1-3;2-4;1-2;3-5", null)]
         [TestCase(1, 1, 5, 120, "2017/10/26", "1-3;2-4;1-2;3-5", "El porcentaje de descuento debe ser un valor entre 0 y 100")]
         [TestCase(1, 1,120, 5, "2017/10/26", "1-3;2-4;1-2;3-5", "El porcentaje de comision debe ser un valor entre 0 y 100")]
         public void registerVenta_VentaValidation_returnErrorMessage(int pCliente_id, int pVendedorId, int pComision, int pDescuento, DateTime pFecha, string pProductoLista, string expected)
@@ -56,18 +56,23 @@ namespace TestCases
 
             CRM.Controllers.IVentaDB fakeDB = Substitute.For<CRM.Controllers.IVentaDB>();
 
-            fakeDB.addVentaToDatabase(pVenta).Returns(30);
-            fakeDB.addVentaXProductoToDatabase(30, 31, 32).ReturnsForAnyArgs(true);
-            AddVenta venta = new AddVenta(fakeDB);
-            venta.InsertVenta(pVenta);
+            fakeDB.agregarVentaToDatabase(pVenta).Returns(30);
+            fakeDB.agregarVentaXProductoToDatabase(30, 31, 32).ReturnsForAnyArgs(true);
+            AgregarVenta venta = new AgregarVenta(fakeDB);
+            venta.InsertarVenta(pVenta);
             Assert.AreEqual(pVenta.errorMsj, expected);
         }
         [TestCase("2014/02/31",false)]
         [TestCase("2013/03/31", true)]
         [TestCase("2013/31", false)]
+        [TestCase("2013/32/32", false)]
+        [TestCase("2013", false)]
+        [TestCase("2016/02/29", true)]
+        [TestCase("29/03/97", false)]
+        [TestCase("29/03/", false)]
         public void dateIsValid_ValidDate_ReturnBool(String date, Boolean expected)
-        {
-            Assert.AreEqual(AddVenta.dateIsCorrect(date),expected);
+        {   
+            Assert.AreEqual(AgregarVenta.fechaEsCorrecta(date),expected);
         }
 
         [TestCase(1, 1, 5, 5, "2017/10/26", "1-3;2-4;1-2;3-5")]
@@ -83,10 +88,10 @@ namespace TestCases
 
             CRM.Controllers.IVentaDB fakeDB = Substitute.For<CRM.Controllers.IVentaDB>();
 
-            fakeDB.addVentaToDatabase(pVenta).Returns(30);
-            fakeDB.addVentaXProductoToDatabase(30, 31, 32).ReturnsForAnyArgs(true);
-            AddVenta venta = new AddVenta(fakeDB);
-            venta.InsertVenta(pVenta);
+            fakeDB.agregarVentaToDatabase(pVenta).Returns(30);
+            fakeDB.agregarVentaXProductoToDatabase(30, 31, 32).ReturnsForAnyArgs(true);
+            AgregarVenta venta = new AgregarVenta(fakeDB);
+            venta.InsertarVenta(pVenta);
             Assert.AreEqual(pVenta.errorMsj, null);
         }
 

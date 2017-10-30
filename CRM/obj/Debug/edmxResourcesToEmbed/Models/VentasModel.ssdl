@@ -49,6 +49,7 @@
     <Property Name="comision" Type="int" />
     <Property Name="fvendedor_id" Type="int" />
     <Property Name="cliente_id" Type="int" />
+    <Property Name="tipo" Type="varchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="Ventas_x_Productos">
     <Key>
@@ -95,6 +96,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Function Name="getPropuestas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="getVentas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <EntityContainer Name="CRMModel2StoreContainer">
     <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="dbo" store:Type="Tables" />

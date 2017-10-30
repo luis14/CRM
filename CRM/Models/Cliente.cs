@@ -14,12 +14,13 @@ namespace CRM.Models
     
     public partial class Cliente
     {
+        public string errorMsj;
+
         public int cliente_id { get; set; }
         public string nombre { get; set; }
         public string pais { get; set; }
         public string correo { get; set; }
         public string telefono { get; set; }
         public string tipoCliente { get; set; }
-        public string errorMsj { get; set; }
     }
 }
