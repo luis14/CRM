@@ -29,7 +29,7 @@
             <div id="login">
                 <h1>Inicio de sesion</h1>
 
-                @using (Html.BeginForm("Autherize", "Login", FormMethod.Post))
+                @using (Html.BeginForm("autorizarUsuario", "Login", FormMethod.Post))
                 {
                     <div class="field-wrap">
                         @Html.LabelFor(model => model.username)
@@ -41,7 +41,11 @@
                         @Html.EditorFor(model => model.pass, new { htmlAttributes = new { @type = "password" } })
                     </div>
 
-                    
+
+                    <div class="field-wrap">
+
+                        <input type="submit" name="name" value="Login" />
+                    </div>
                     <div class="field-wrap">
                         <label>
                             @Html.DisplayFor(model => model.errorMessage)
@@ -49,11 +53,9 @@
 
                     </div>
 
-                     <input type="submit" name="name" value="Login" />
-
                 }
 
-            </div>
+                    </div>
             <div id="signup">
                 <h1>Registro de usuario</h1>
                 @using (Html.BeginForm("register", "Login", FormMethod.Post))

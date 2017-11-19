@@ -14,8 +14,8 @@ namespace CRM.Models
     
     public partial class Venta
     {
-        public string errorMsj;
-        public string productolista;
+        public string errorMsj { get; set; }
+        public string productolista { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Venta()
